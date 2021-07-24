@@ -11,19 +11,15 @@ user_year = gets.chomp.to_i
 date_number = 0
 
 if (user_year % 4 == 0 && user_year % 100 != 0) || user_year == 2000
-  user_month -= 1
-  while user_month > 0 do
-    date_number += leap_year[user_month]
-    user_month -= 1
-  end
-  date_number += user_day
-else
-  user_month -= 1
-  while user_month > 0 do
-    date_number += year[user_month]
-    user_month -= 1
-  end
-  date_number += user_day
+  year[2] = 29
 end
+
+user_month -= 1
+while user_month > 0 do
+  date_number += year[user_month]
+  user_month -= 1
+end
+
+date_number += user_day
 
 puts "Порядковый номер вашей даты: #{date_number}"
