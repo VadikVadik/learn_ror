@@ -18,6 +18,26 @@ class Route
     end
   end
 
+  def current_station(train)
+    @stations_list.each do |station|
+      if station.trains.include?(train)
+        return station
+      end
+    end
+  end
+
+  def next_station(train)
+    current = current_station(train)
+    index = @stations_list.index(current)
+    return @stations_list[index + 1]
+  end
+
+  def pre_station(train)
+    current = current_station(train)
+    index = @stations_list.index(current)
+    return @stations_list[index - 1]
+  end
+
   def print_stations_list
     @stations_list.each { |station| puts station.title }
   end

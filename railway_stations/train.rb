@@ -32,37 +32,35 @@ class Train
   def destination_route(route)
     @route = route
     route.departure_station.take_train(self)
-    @current_station = route.departure_station
-    @next_station = route.stations_list[1]
+    @current_station = route.current_station(self)
+    @next_station = route.next_station(self)
     @previous_station = "Train at the departure station"
   end
 
   def go_ahead
-    if @current_station != @route.stations_list.last
+    if @current_station != @route.arrival_station
       @current_station.send_train(self)
-      index = @route.stations_list.index(@current_station)
-      @current_station = @route.stations_list[index + 1]
-      @current_station.take_train(self)
-      @next_station = @route.stations_list[index + 2]
-      @previous_station = @route.stations_list[index]
+      @next_station.take_train(self)
+      @current_station = @route.current_station(self)
+      @next_station = @route.next_station(self)
+      @previous_station = @route.pre_station(self)
     else
       puts "Train at the end station."
       @next_station = "Train at the end station."
-      @previous_station = @route.stations_list[-2]
+      @previous_station = @route.pre_station(self)
     end
   end
 
   def go_back
-    if @current_station != @route.stations_list.first
+    if @current_station != @route.departure_station
       @current_station.send_train(self)
-      index = @route.stations_list.index(@current_station)
-      @current_station = @route.stations_list[index - 1]
-      @current_station.take_train(self)
-      @next_station = @route.stations_list[index]
-      @previous_station = @route.stations_list[index + 2]
+      @previous_station.take_train(self)
+      @current_station = @route.current_station(self)
+      @next_station = @route.next_station(self)
+      @previous_station = @route.pre_station(self)
     else
       puts "Train at the departure station."
-      @next_station = route.stations_list[1]
+      @next_station = @route.next_station(self)
       @previous_station = "Train at the departure station"
     end
   end
