@@ -27,13 +27,13 @@ class Route
   end
 
   def next_station(train)
-    current = current_station(train)
+    current = self.current_station(train)
     index = @stations_list.index(current)
     return @stations_list[index + 1]
   end
 
   def pre_station(train)
-    current = current_station(train)
+    current = self.current_station(train)
     index = @stations_list.index(current)
     return @stations_list[index - 1]
   end
@@ -43,3 +43,5 @@ class Route
   end
 
 end
+
+#Все методы public

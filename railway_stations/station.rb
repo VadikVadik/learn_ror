@@ -1,32 +1,49 @@
 class Station
-  attr_reader :title, :trains
+  attr_accessor :title, :trains
 
   def initialize(title)
-    @title = title
-    @trains = []
+    self.title = title
+    self.trains = []
   end
 
   def take_train(train)
-    @trains << train
+    self.trains << train
   end
 
   def send_train(train)
-    if @trains.include?(train)
-      @trains.delete(train)
+    if self.trains.include?(train)
+      self.trains.delete(train)
     end
   end
 
   def trains_list(train_type)
+    count = 1
+    if self.trains.empty?
+      puts "***На станции #{self.title} нет поездов.***"
+      return
+    end
+
     if train_type == "all"
-      puts "Now at the station:"
-      @trains.each { |train| puts "Train №#{train.number}, type: #{train.type}"}
+      self.trains.each do |train|
+        puts "#{count}. Поезд №#{train.number}"
+        count += 1
+      end
     elsif train_type == "passenger"
-      puts "Passenger trains at the station:"
-      @trains.each { |train| puts "Train №#{train.number}, type: #{train.type}" if train.type == "passenger"}
-    elsif train_type == "freight"
-      puts "Freight trains at the station:"
-      @trains.each { |train| puts "Train №#{train.number}, type: #{train.type}" if train.type == "freight"}
+      self.trains.each do |train|
+        if train.type == "passenger"
+          puts "#{count}. Поезд №#{train.number}"
+          count += 1
+        end
+      end
+    elsif train_type == "cargo"
+      self.trains.each do |train|
+        if train.type == "cargo"
+          puts "#{count}. Поезд №#{train.number}"
+          count += 1
+        end
+      end
     end
   end
-
 end
+
+#Все методы public

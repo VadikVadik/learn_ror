@@ -1,11 +1,9 @@
 class Train
-  attr_accessor :current_speed
-  attr_reader :number, :type, :wagons, :current_station, :next_station, :previous_station
+  attr_accessor :number, :wagons, :current_speed, :current_station, :next_station, :previous_station, :route
 
-  def initialize(number, type, wagons)
+  def initialize(number)
     @number = number
-    @type = type
-    @wagons = wagons
+    @wagons = []
     @current_speed = 0
     @current_station
     @next_station
@@ -17,16 +15,16 @@ class Train
     @current_speed = 0
   end
 
-  def add_remove_wagon(sign)
-    if @current_speed == 0
-      if sign == "+"
-        @wagons += 1
-      elsif sign == "-"
-        @wagons -= 1
-      end
-    else
-      puts "Stop the train!"
-    end
+  def stoped?
+    @current_speed.zero?
+  end
+
+  def add_wagon(wagon)
+    self.add_wagon!(wagon) if self.stoped?
+  end
+
+  def remove_wagon(wagon)
+    self.remove_wagon!(wagon) if self.stoped?
   end
 
   def destination_route(route)
@@ -77,4 +75,13 @@ class Train
     @previous_station.title
   end
 
+  protected #Методы помещены в protected в целях соблюдения принципа инкапсуляции, и соблюдения требований ТЗ о том, что вагоны могут прицпляться/отцепляться только когда поезд стоит на месте
+
+  def add_wagon!(wagon)
+    @wagons << wagon if self.type == wagon.type
+  end
+
+  def remove_wagon!(wagon)
+    @wagons.delete(wagon) if self.type == wagon.type
+  end
 end
