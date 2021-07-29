@@ -38,6 +38,34 @@ class Route
     return @stations_list[index - 1]
   end
 
+  def go_ahead(train)
+    if train.current_station != self.arrival_station
+      train.current_station.send_train(train)
+      train.next_station.take_train(train)
+      train.current_station = self.current_station(train)
+      train.next_station = self.next_station(train)
+      train.previous_station = self.pre_station(train)
+    else
+      puts "Train at the end station."
+      train.next_station = "Train at the end station."
+      train.previous_station = self.pre_station(train)
+    end
+  end
+
+  def go_back(train)
+    if train.current_station != self.departure_station
+      train.current_station.send_train(train)
+      train.previous_station.take_train(train)
+      train.current_station = self.current_station(train)
+      train.next_station = self.next_station(train)
+      train.previous_station = self.pre_station(train)
+    else
+      puts "Train at the departure station."
+      train.next_station = self.next_station(train)
+      train.previous_station = "Train at the departure station"
+    end
+  end
+
   def print_stations_list
     @stations_list.each { |station| puts station.title }
   end
