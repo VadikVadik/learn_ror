@@ -1,11 +1,14 @@
 class Route
+  include InstanceCounter
 
   attr_reader :departure_station, :arrival_station, :stations_list
+  @instances_count = 0
 
   def initialize(departure_station, arrival_station)
     @departure_station = departure_station
     @arrival_station = arrival_station
     @stations_list = [departure_station, arrival_station]
+    register_instance
   end
 
   def add_transition_station(station)

@@ -45,7 +45,6 @@ def choose_route
   return route
 end
 
-
 def create_station
   puts "Введите название станции"
   station_title = gets.chomp
