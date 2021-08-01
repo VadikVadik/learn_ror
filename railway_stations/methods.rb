@@ -58,9 +58,15 @@ def create_train
 2. Грузовой"
   user_input = gets.chomp.to_i
   puts "Введите номер поезда"
-  train_number = gets.chomp.to_sym
-  @trains[train_number] = PassengerTrain.new(train_number) if user_input == 1
-  @trains[train_number] = CargoTrain.new(train_number) if user_input == 2
+begin
+  train_number = gets.chomp
+  raise "FormatError" if train_number !~ /^[A-Z0-9]{3}-?[A-Z0-9]{2}$/i
+rescue StandardError
+  puts "Неверный формат номера поезда"
+  retry
+end
+  @trains[train_number.to_sym] = PassengerTrain.new(train_number) if user_input == 1
+  @trains[train_number.to_sym] = CargoTrain.new(train_number) if user_input == 2
   puts "***Поезд №#{train_number.to_s} создан***"
 end
 

@@ -2,14 +2,23 @@ class Station
   include InstanceCounter
 
   attr_accessor :title, :trains
+
   @@all_stations = []
   @instances_count = 0
 
   def initialize(title)
     @title = title
+    validate!
     @trains = []
     @@all_stations << self
     register_instance
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
   end
 
   def self.all
@@ -43,6 +52,11 @@ class Station
       puts "#{index + 1}. Поезд №#{train.number}"
     end
   end
-end
 
-#Все методы public
+  protected
+
+  def validate!
+    raise "У станции должно быть название" if self.title.nil? || self.title.size == 0
+  end
+  
+end

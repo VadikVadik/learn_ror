@@ -3,15 +3,24 @@ class Train
   include CompanyManufacturer
 
   attr_accessor :number, :wagons, :current_speed, :instances_count, :current_station, :next_station, :previous_station, :route
+  TRAIN_NUMBER_FORMAT = /^[A-Z0-9]{3}-?[A-Z0-9]{2}$/i
   @@all_trains = []
   @instances_count = 0
 
   def initialize(number)
     @number = number
+    validate!
     @wagons = []
     @current_speed = 0
     @@all_trains << self
     register_instance
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
   end
 
   def self.find(number)
@@ -50,7 +59,12 @@ class Train
     self.route.go_back(self)
   end
 
-  protected #Методы помещены в protected в целях соблюдения принципа инкапсуляции, и соблюдения требований ТЗ о том, что вагоны могут прицпляться/отцепляться только когда поезд стоит на месте
+  protected
+
+  def validate!
+    raise "У поезда должен быть номер" if self.number.nil? || self.number.size < 5
+    raise "Неверный формат номера поезда" if self.number !~ TRAIN_NUMBER_FORMAT
+  end
 
   def add_wagon!(wagon)
     @wagons << wagon if self.type == wagon.type

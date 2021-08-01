@@ -7,8 +7,16 @@ class Route
   def initialize(departure_station, arrival_station)
     @departure_station = departure_station
     @arrival_station = arrival_station
+    validate!
     @stations_list = [departure_station, arrival_station]
     register_instance
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
   end
 
   def add_transition_station(station)
@@ -49,7 +57,6 @@ class Route
       train.next_station = self.next_station(train)
       train.previous_station = self.pre_station(train)
     else
-      puts "Train at the end station."
       train.next_station = "Train at the end station."
       train.previous_station = self.pre_station(train)
     end
@@ -63,7 +70,6 @@ class Route
       train.next_station = self.next_station(train)
       train.previous_station = self.pre_station(train)
     else
-      puts "Train at the departure station."
       train.next_station = self.next_station(train)
       train.previous_station = "Train at the departure station"
     end
@@ -73,6 +79,11 @@ class Route
     @stations_list.each { |station| puts station.title }
   end
 
-end
+  protected
 
-#Все методы public
+  def validate!
+    raise "Отсутствуют сведения о станции отправления/назначения" if self.departure_station.nil? || self.arrival_station.nil?
+    raise "Отсутствуют сведения о станции отправления/назначения" if self.departure_station.size == 0 || self.arrival_station.size == 0
+  end
+
+end
