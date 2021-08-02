@@ -62,8 +62,11 @@ class Train
   protected
 
   def validate!
-    raise "У поезда должен быть номер" if self.number.nil? || self.number.size < 5
-    raise "Неверный формат номера поезда" if self.number !~ TRAIN_NUMBER_FORMAT
+    errors = []
+    errors << "У поезда должен быть номер" if self.number.nil?
+    errors << "Номер поезда должен содержать не менее 5 символов" if self.number.size < 5
+    errors << "Неверный формат номера поезда" if self.number !~ TRAIN_NUMBER_FORMAT
+    raise errors.join(". ") unless errors.empty?
   end
 
   def add_wagon!(wagon)

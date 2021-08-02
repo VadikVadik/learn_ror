@@ -56,7 +56,10 @@ class Station
   protected
 
   def validate!
-    raise "У станции должно быть название" if self.title.nil? || self.title.size == 0
+    errors = []
+    errors << "Название станции не введено" if self.title.nil?
+    errors << "Название станции должно содержать не менее 1 символа" if self.title.size == 0
+    raise errors.join(". ") unless errors.empty?
   end
-  
+
 end
