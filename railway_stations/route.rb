@@ -85,8 +85,6 @@ class Route
     errors = []
     errors << "Отсутствуют сведения о станции отправления" if self.departure_station.nil?
     errors << "Отсутствуют сведения о станции назначения" if self.arrival_station.nil?
-    errors << "Название станции отправления должно содержать не менее 1 символа" if self.departure_station.size == 0
-    errors << "Название станции назанчения должно содержать не менее 1 символа" if self.arrival_station.size == 0
     raise errors.join(". ") unless errors.empty?
   end
 

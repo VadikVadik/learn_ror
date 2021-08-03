@@ -16,15 +16,15 @@ class Train
     register_instance
   end
 
+  def self.find(number)
+    @@all_trains.select { |train| train.number == number}.first
+  end
+
   def valid?
     validate!
     true
   rescue
     false
-  end
-
-  def self.find(number)
-    @@all_trains.select { |train| train.number == number}.first
   end
 
   def stop
@@ -41,6 +41,10 @@ class Train
 
   def remove_wagon(wagon)
     self.remove_wagon!(wagon) if self.stoped?
+  end
+
+  def each_wagons
+    self.wagons.each { |wagon| yield(wagon) }
   end
 
   def destination_route(route)

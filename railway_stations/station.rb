@@ -14,6 +14,10 @@ class Station
     register_instance
   end
 
+  def self.all
+    @@all_stations
+  end
+
   def valid?
     validate!
     true
@@ -21,8 +25,8 @@ class Station
     false
   end
 
-  def self.all
-    @@all_stations
+  def each_trains
+    self.trains.each { |train| yield(train) }
   end
 
   def take_train(train)

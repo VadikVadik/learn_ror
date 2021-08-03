@@ -18,12 +18,14 @@ METHODS = {
   2 => :create_train,
   3 => :add_next_wagon,
   4 => :remove_last_wagon,
-  5 => :create_route,
-  6 => :edit_route,
-  7 => :assign_route,
-  8 => :move_train,
-  9 => :list_stations,
-  10 => :trains_at_station
+  5 => :train_wagons_list,
+  6 => :take_the_wagon,
+  7 => :create_route,
+  8 => :edit_route,
+  9 => :assign_route,
+  10 => :move_train,
+  11 => :list_stations,
+  12 => :trains_at_station
 }
 
 loop do
