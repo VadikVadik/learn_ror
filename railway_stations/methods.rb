@@ -87,29 +87,10 @@ end
 
 def add_next_wagon
   train = choose_train
-  if train.type == :passenger
-    puts "Введите количество мест в вагоне"
-    begin
-      seats = gets.chomp.to_i
-      train.add_wagon(PassengerWagon.new(seats))
-    rescue StandardError => e
-      puts e.message
-      puts "***Введите корректное количество мест***"
-      retry
-    end
-  elsif train.type == :cargo
-    puts "Введите объем вагона"
-    begin
-      volume = gets.chomp.to_i
-      train.add_wagon(CargoWagon.new(volume))
-    rescue StandardError => e
-      puts e.message
-      puts "***Введите корректный объем вагона***"
-      retry
-    end
-  end
+  train.add_wagon(PassengerWagon.new) if train.type == :passenger
+  train.add_wagon(CargoWagon.new) if train.type == :cargo
   train.wagons[-1].number = train.wagons.size
-  puts "***Поезду №#{train.number} прицеплен вагон. Всего #{train.wagons.length} вагонов***"
+  puts "***Поезду №#{train.number} прицеплен вагон. Всего #{train.wagons.size} вагонов***"
 end
 
 def remove_last_wagon
@@ -183,8 +164,7 @@ end
 
 def train_wagons_list
   train = choose_train
-  train.each_wagons { |wagon| puts "Вагон №#{wagon.number}, тип: пассажирский, свободно мест: #{wagon.free_seats}, занято мест: #{wagon.occupied_seats}"} if train.type == :passenger
-  train.each_wagons { |wagon| puts "Вагон №#{wagon.number}, тип: грузовой, свободный объем: #{wagon.free_volume}, использованный объем: #{wagon.used_volume}"} if train.type == :cargo
+  train.each_wagons { |wagon| puts "Вагон №#{wagon.number}, тип: #{wagon.type}, свободно #{wagon.free_place} #{wagon.class::UNIT}, занято #{wagon.used_place} #{wagon.class::UNIT}"}
 end
 
 def take_the_wagon
@@ -192,10 +172,10 @@ def take_the_wagon
   if wagon.type == :passenger
     puts "Сколько мест Вы хотите занять?"
     user_input = gets.chomp.to_i
-    user_input.times {wagon.take_the_seat}
+    user_input.times {wagon.take_place}
   elsif wagon.type == :cargo
     puts "Какой объем Вы хотите занять?"
     user_input = gets.chomp.to_i
-    wagon.take_the_volume(user_input)
+    wagon.take_place(user_input)
   end
 end

@@ -3,21 +3,27 @@ class Train
   include CompanyManufacturer
 
   attr_accessor :number, :wagons, :current_speed, :instances_count, :current_station, :next_station, :previous_station, :route
+  attr_reader :type
   TRAIN_NUMBER_FORMAT = /^[A-Z0-9]{3}-?[A-Z0-9]{2}$/i
-  @@all_trains = []
+  @@trains = []
   @instances_count = 0
 
-  def initialize(number)
+  def initialize(number, type = self.class::TYPE)
     @number = number
+    @type = type
     validate!
     @wagons = []
     @current_speed = 0
-    @@all_trains << self
+    @@trains << self
     register_instance
   end
 
+  def self.all
+    @@trains
+  end
+
   def self.find(number)
-    @@all_trains.select { |train| train.number == number}.first
+    @@trains.select { |train| train.number == number}.first
   end
 
   def valid?
@@ -27,8 +33,13 @@ class Train
     false
   end
 
+  def type_to_s
+    return "Пассажирский" if self.class::TYPE == :passenger
+    return "Грузовой" if self.class::TYPE == :cargo
+  end
+
   def stop
-    self.current_speed = 0
+    current_speed = 0
   end
 
   def stoped?
@@ -36,15 +47,15 @@ class Train
   end
 
   def add_wagon(wagon)
-    self.add_wagon!(wagon) if self.stoped?
+    add_wagon!(wagon) if stoped?
   end
 
   def remove_wagon(wagon)
-    self.remove_wagon!(wagon) if self.stoped?
+    remove_wagon!(wagon) if stoped?
   end
 
   def each_wagons
-    self.wagons.each { |wagon| yield(wagon) }
+    wagons.each { |wagon| yield(wagon) }
   end
 
   def destination_route(route)
@@ -56,11 +67,11 @@ class Train
   end
 
   def go_ahead
-    self.route.go_ahead(self)
+    route.go_ahead(self)
   end
 
   def go_back
-    self.route.go_back(self)
+    route.go_back(self)
   end
 
   protected
@@ -74,10 +85,13 @@ class Train
   end
 
   def add_wagon!(wagon)
-    @wagons << wagon if self.type == wagon.type
+    if type == wagon.type
+      wagons << wagon
+      wagon.number = wagons.size
+    end
   end
 
   def remove_wagon!(wagon)
-    @wagons.delete(wagon) if self.type == wagon.type
+    wagons.delete(wagon) if type == wagon.type
   end
 end

@@ -20,17 +20,17 @@ class Route
   end
 
   def add_transition_station(station)
-    @stations_list.insert(-2, station)
+    stations_list.insert(-2, station)
   end
 
   def delete_transition_station(station)
-    if @stations_list.include?(station)
-      @stations_list.delete(station)
+    if stations_list.include?(station)
+      stations_list.delete(station)
     end
   end
 
   def current_station(train)
-    @stations_list.each do |station|
+    stations_list.each do |station|
       if station.trains.include?(train)
         return station
       end
@@ -38,53 +38,53 @@ class Route
   end
 
   def next_station(train)
-    current = self.current_station(train)
-    index = @stations_list.index(current)
-    return @stations_list[index + 1]
+    current = current_station(train)
+    index = stations_list.index(current)
+    return stations_list[index + 1]
   end
 
   def pre_station(train)
-    current = self.current_station(train)
-    index = @stations_list.index(current)
-    return @stations_list[index - 1]
+    current = current_station(train)
+    index = stations_list.index(current)
+    return stations_list[index - 1]
   end
 
   def go_ahead(train)
-    if train.current_station != self.arrival_station
+    if train.current_station != arrival_station
       train.current_station.send_train(train)
       train.next_station.take_train(train)
-      train.current_station = self.current_station(train)
-      train.next_station = self.next_station(train)
-      train.previous_station = self.pre_station(train)
+      train.current_station = current_station(train)
+      train.next_station = next_station(train)
+      train.previous_station = pre_station(train)
     else
       train.next_station = "Train at the end station."
-      train.previous_station = self.pre_station(train)
+      train.previous_station = pre_station(train)
     end
   end
 
   def go_back(train)
-    if train.current_station != self.departure_station
+    if train.current_station != departure_station
       train.current_station.send_train(train)
       train.previous_station.take_train(train)
-      train.current_station = self.current_station(train)
-      train.next_station = self.next_station(train)
-      train.previous_station = self.pre_station(train)
+      train.current_station = current_station(train)
+      train.next_station = next_station(train)
+      train.previous_station = pre_station(train)
     else
-      train.next_station = self.next_station(train)
+      train.next_station = next_station(train)
       train.previous_station = "Train at the departure station"
     end
   end
 
   def print_stations_list
-    @stations_list.each { |station| puts station.title }
+    stations_list.each_with_index { |station, index| puts "#{index + 1}. #{station.title}" }
   end
 
   protected
 
   def validate!
     errors = []
-    errors << "Отсутствуют сведения о станции отправления" if self.departure_station.nil?
-    errors << "Отсутствуют сведения о станции назначения" if self.arrival_station.nil?
+    errors << "Отсутствуют сведения о станции отправления" if departure_station.nil?
+    errors << "Отсутствуют сведения о станции назначения" if arrival_station.nil?
     raise errors.join(". ") unless errors.empty?
   end
 

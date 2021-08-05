@@ -1,46 +1,15 @@
-class CargoWagon
-  include CompanyManufacturer
-  attr_accessor :free, :used, :number
-  attr_reader :type, :volume
+class CargoWagon < Wagon
+  UNIT = "м3"
+  TYPE = :cargo
 
-  def initialize(type = :cargo, volume)
-    @type = type
-    @volume = volume
-    @free = volume
-    @used = 0
-    validate!
+  @instances_count = 0
+
+  def initialize(place = 500)
+    super
   end
 
-  def valid?
-    validate!
-    true
-  rescue
-    false
-  end
-
-  def take_the_volume(volume)
-    if self.used_volume < self.volume
-      @free -= volume
-      @used += volume
-    end
-  end
-
-  def used_volume
-    self.used
-  end
-
-  def free_volume
-    self.free
-  end
-
-  protected
-
-  def validate!
-    errors = []
-    errors << "Неверный тип вагона" if self.type != :cargo
-    errors << "Отсутствуют данные об объеме вагона" if self.volume.nil?
-    errors << "Неверный объем вагона" if self.volume == 0
-    raise errors.join(". ") unless errors.empty?
+  def take_place(amount)
+    self.used_place += amount if self.free_place >= amount
   end
 
 end

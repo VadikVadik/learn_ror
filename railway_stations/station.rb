@@ -3,19 +3,19 @@ class Station
 
   attr_accessor :title, :trains
 
-  @@all_stations = []
+  @@stations = []
   @instances_count = 0
 
   def initialize(title)
     @title = title
     validate!
     @trains = []
-    @@all_stations << self
+    @@stations << self
     register_instance
   end
 
   def self.all
-    @@all_stations
+    @@stations
   end
 
   def valid?
@@ -26,11 +26,11 @@ class Station
   end
 
   def each_trains
-    self.trains.each { |train| yield(train) }
+    trains.each { |train| yield(train) }
   end
 
   def take_train(train)
-    self.trains << train
+    trains << train
   end
 
   def send_train(train)
@@ -41,7 +41,7 @@ class Station
 
   def trains_list(train_type)
 
-    if self.trains.empty?
+    if trains.empty?
       puts "***На станции #{self.title} нет поездов.***"
       return
     end
