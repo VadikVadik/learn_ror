@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 class Train
   include InstanceCounter
   include CompanyManufacturer
 
-  attr_accessor :number, :wagons, :current_speed, :instances_count, :current_station, :next_station, :previous_station, :route
+  attr_accessor :number, :wagons, :current_speed, :instances_count, :current_station, :next_station, :previous_station,
+                :route
   attr_reader :type
-  TRAIN_NUMBER_FORMAT = /^[A-Z0-9]{3}-?[A-Z0-9]{2}$/i
+
+  TRAIN_NUMBER_FORMAT = /^[A-Z0-9]{3}-?[A-Z0-9]{2}$/i.freeze
   @@trains = []
   @instances_count = 0
 
@@ -23,13 +27,13 @@ class Train
   end
 
   def self.find(number)
-    @@trains.select { |train| train.number == number}.first
+    @@trains.detect { |train| train.number == number }
   end
 
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
@@ -39,7 +43,7 @@ class Train
   end
 
   def stop
-    current_speed = 0
+    @current_speed = 0
   end
 
   def stoped?
@@ -54,8 +58,8 @@ class Train
     remove_wagon!(wagon) if stoped?
   end
 
-  def each_wagons
-    wagons.each { |wagon| yield(wagon) }
+  def each_wagons(&block)
+    wagons.each(&block)
   end
 
   def destination_route(route)
@@ -78,17 +82,17 @@ class Train
 
   def validate!
     errors = []
-    errors << "У поезда должен быть номер" if self.number.nil?
-    errors << "Номер поезда должен содержать не менее 5 символов" if self.number.size < 5
-    errors << "Неверный формат номера поезда" if self.number !~ TRAIN_NUMBER_FORMAT
+    errors << "У поезда должен быть номер" if number.nil?
+    errors << "Номер поезда должен содержать не менее 5 символов" if number.size < 5
+    errors << "Неверный формат номера поезда" if number !~ TRAIN_NUMBER_FORMAT
     raise errors.join(". ") unless errors.empty?
   end
 
   def add_wagon!(wagon)
-    if type == wagon.type
-      wagons << wagon
-      wagon.number = wagons.size
-    end
+    return unless type == wagon.type
+
+    wagons << wagon
+    wagon.number = wagons.size
   end
 
   def remove_wagon!(wagon)

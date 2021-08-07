@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PassengerWagon < Wagon
   UNIT = "мест"
   TYPE = :passenger
@@ -9,7 +11,6 @@ class PassengerWagon < Wagon
   end
 
   def take_place
-    self.used_place += 1 if self.free_place > 0
+    self.used_place += 1 if free_place.positive?
   end
-
 end

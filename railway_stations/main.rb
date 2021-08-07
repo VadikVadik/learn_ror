@@ -1,14 +1,16 @@
-require_relative "instance_counter.rb"
-require_relative "company_manufacturer.rb"
-require_relative "station.rb"
-require_relative "train.rb"
-require_relative "passenger_train.rb"
-require_relative "cargo_train.rb"
-require_relative "wagon.rb"
-require_relative "passenger_wagon.rb"
-require_relative "cargo_wagon.rb"
-require_relative "route.rb"
-require_relative "methods.rb"
+# frozen_string_literal: true
+
+require_relative 'instance_counter'
+require_relative 'company_manufacturer'
+require_relative 'station'
+require_relative 'train'
+require_relative 'passenger_train'
+require_relative 'cargo_train'
+require_relative 'wagon'
+require_relative 'passenger_wagon'
+require_relative 'cargo_wagon'
+require_relative 'route'
+require_relative 'methods'
 
 @stations = {}
 @trains = {}
@@ -27,11 +29,12 @@ METHODS = {
   10 => :move_train,
   11 => :list_stations,
   12 => :trains_at_station
-}
+}.freeze
 
 loop do
   menu
   user_input = gets.chomp.to_i
-  break if user_input == 0
+  break if user_input.zero?
+
   send(METHODS[user_input])
 end

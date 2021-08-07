@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CargoWagon < Wagon
   UNIT = "м3"
   TYPE = :cargo
@@ -9,7 +11,6 @@ class CargoWagon < Wagon
   end
 
   def take_place(amount)
-    self.used_place += amount if self.free_place >= amount
+    self.used_place += amount if free_place >= amount
   end
-
 end

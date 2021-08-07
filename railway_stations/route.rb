@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 class Route
   include InstanceCounter
 
   attr_reader :departure_station, :arrival_station, :stations_list
+
   @instances_count = 0
 
   def initialize(departure_station, arrival_station)
@@ -15,7 +18,7 @@ class Route
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
@@ -24,29 +27,25 @@ class Route
   end
 
   def delete_transition_station(station)
-    if stations_list.include?(station)
-      stations_list.delete(station)
-    end
+    stations_list.delete(station) if stations_list.include?(station)
   end
 
   def current_station(train)
     stations_list.each do |station|
-      if station.trains.include?(train)
-        return station
-      end
+      return station if station.trains.include?(train)
     end
   end
 
   def next_station(train)
     current = current_station(train)
     index = stations_list.index(current)
-    return stations_list[index + 1]
+    stations_list[index + 1]
   end
 
   def pre_station(train)
     current = current_station(train)
     index = stations_list.index(current)
-    return stations_list[index - 1]
+    stations_list[index - 1]
   end
 
   def go_ahead(train)
@@ -55,11 +54,10 @@ class Route
       train.next_station.take_train(train)
       train.current_station = current_station(train)
       train.next_station = next_station(train)
-      train.previous_station = pre_station(train)
     else
       train.next_station = "Train at the end station."
-      train.previous_station = pre_station(train)
     end
+    train.previous_station = pre_station(train)
   end
 
   def go_back(train)
@@ -87,5 +85,4 @@ class Route
     errors << "Отсутствуют сведения о станции назначения" if arrival_station.nil?
     raise errors.join(". ") unless errors.empty?
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Station
   include InstanceCounter
 
@@ -21,12 +23,12 @@ class Station
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
-  def each_trains
-    trains.each { |train| yield(train) }
+  def each_trains(&block)
+    trains.each(&block)
   end
 
   def take_train(train)
@@ -34,23 +36,17 @@ class Station
   end
 
   def send_train(train)
-    if @trains.include?(train)
-      @trains.delete(train)
-    end
+    @trains.delete(train) if @trains.include?(train)
   end
 
   def trains_list(train_type)
+    puts "***На станции #{title} нет поездов.***" if trains.empty?
 
-    if trains.empty?
-      puts "***На станции #{self.title} нет поездов.***"
-      return
-    end
-
-    if train_type == :all
-      trains = self.trains
-    else
-      trains = self.trains.select { |train| train.type == train_type}
-    end
+    trains = if train_type == :all
+               self.trains
+             else
+               self.trains.select { |train| train.type == train_type }
+             end
 
     trains.each_with_index do |train, index|
       puts "#{index + 1}. Поезд №#{train.number}"
@@ -61,9 +57,8 @@ class Station
 
   def validate!
     errors = []
-    errors << "Название станции не введено" if self.title.nil?
-    errors << "Название станции должно содержать не менее 1 символа" if self.title.size == 0
+    errors << "Название станции не введено" if title.nil?
+    errors << "Название станции должно содержать не менее 1 символа" if title.size.zero?
     raise errors.join(". ") unless errors.empty?
   end
-
 end

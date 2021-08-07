@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 class Wagon
   include InstanceCounter
   include CompanyManufacturer
-  attr_accessor :free_place, :used_place, :number
+  attr_accessor :used_place, :number
+  attr_writer :free_place
   attr_reader :type, :place
+
   @instances_count = 0
 
-  def initialize(type = self.class::TYPE, place)
+  def initialize(place, type = self.class::TYPE)
     @type = type
     @place = place
     @used_place = 0
@@ -16,7 +20,7 @@ class Wagon
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
@@ -34,7 +38,7 @@ class Wagon
   def validate!
     errors = []
     errors << "Нет данных о количестве мест в вагоне" if place.nil?
-    errors << "Неверное количество мест в вагоне" if place == 0
+    errors << "Неверное количество мест в вагоне" if place.zero?
     raise errors.join(". ") unless errors.empty?
   end
 end
