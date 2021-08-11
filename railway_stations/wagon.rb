@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class Wagon
+  include Validation
+  include Accessors
   include InstanceCounter
   include CompanyManufacturer
-  include Validation
 
   TYPE = "No type"
 
-  attr_accessor :used_place, :number
+  attr_accessor :number
+  attr_accessor_with_history :used_place
   attr_writer :free_place
   attr_reader :type, :place
 

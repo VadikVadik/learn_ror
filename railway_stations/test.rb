@@ -153,19 +153,19 @@ Train.all.each do |train|
   puts "ПОЕЗД №#{train.number} отправляется со станции #{train.current_station.title}," \
     " следующая станиця #{train.next_station.title}"
   sleep 0.2
-  train_one.go_ahead
+  train.go_ahead
   puts "ПОЕЗД №#{train.number} прибыл на станцию #{train.current_station.title}," \
     " следующая станиця #{train.next_station.title}"
   sleep 0.2
-  train_one.go_ahead
+  train.go_ahead
   puts "ПОЕЗД №#{train.number} прибыл на станцию #{train.current_station.title}," \
     " следующая станиця #{train.next_station.title}"
   sleep 0.2
-  train_one.go_ahead
+  train.go_ahead
   puts "ПОЕЗД №#{train.number} прибыл на станцию #{train.current_station.title}," \
     " следующая станиця #{train.next_station.title}"
   sleep 0.2
-  train_one.go_ahead
+  train.go_ahead
   puts "ПОЕЗД №#{train.number} прибыл на конечную станцию #{train.current_station.title}"
   separator
   puts "На станции #{train.current_station.title} находятся следующие поезда:"

@@ -2,9 +2,11 @@
 
 class Station
   include Validation
+  include Accessors
   include InstanceCounter
 
-  attr_accessor :title, :trains
+  attr_accessor :title
+  strong_attr_accessor :trains, Array
 
   validate :title, :presence
 

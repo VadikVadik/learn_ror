@@ -2,9 +2,12 @@
 
 class Route
   include Validation
+  include Accessors
   include InstanceCounter
 
-  attr_reader :departure_station, :arrival_station, :stations_list
+  attr_reader :stations_list
+  strong_attr_accessor :departure_station, Station
+  strong_attr_accessor :arrival_station, Station
 
   validate :departure_station, :presence
   validate :arrival_station, :presence
@@ -50,9 +53,7 @@ class Route
       train.current_station.send_train(train)
       train.next_station.take_train(train)
       train.current_station = current_station(train)
-      train.next_station = next_station(train)
-    else
-      train.next_station = "Train at the end station."
+      train.next_station = next_station(train) unless next_station(train).nil?
     end
     train.previous_station = pre_station(train)
   end
@@ -63,10 +64,7 @@ class Route
       train.previous_station.take_train(train)
       train.current_station = current_station(train)
       train.next_station = next_station(train)
-      train.previous_station = pre_station(train)
-    else
-      train.next_station = next_station(train)
-      train.previous_station = "Train at the departure station"
+      train.previous_station = pre_station(train) unless pre_station(train).nil?
     end
   end
 

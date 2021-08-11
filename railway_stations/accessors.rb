@@ -25,7 +25,7 @@ module Accessors
       var_name = "@#{name}".to_sym
       define_method(name) { instance_variable_get(var_name) }
       define_method("#{name}=".to_sym) do |value|
-        raise "Неверный тип присваемого значения" unless value.instance_of?(class_type)
+        raise "Неверный тип присваемого значения: #{value.class}, ожидается: #{class_type}" unless value.instance_of?(class_type)
 
         instance_variable_set(var_name, value)
       end

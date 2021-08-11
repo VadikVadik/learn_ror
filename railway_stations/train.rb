@@ -2,14 +2,18 @@
 
 class Train
   include Validation
+  include Accessors
   include InstanceCounter
   include CompanyManufacturer
 
   TRAIN_NUMBER_FORMAT = /^[A-Z0-9]{3}-?[A-Z0-9]{2}$/i.freeze
   TYPE = "No type"
 
-  attr_accessor :number, :wagons, :current_speed, :instances_count, :current_station, :next_station, :previous_station,
-                :route
+  attr_accessor :number, :wagons, :instances_count, :route
+  attr_accessor_with_history :current_speed
+  strong_attr_accessor :current_station, Station
+  strong_attr_accessor :next_station, Station
+  strong_attr_accessor :previous_station, Station
   attr_reader :type
 
   validate :number, :presence
@@ -24,6 +28,7 @@ class Train
     validate!
     @wagons = []
     @current_speed = 0
+    @route
     @@trains << self
     register_instance
   end
