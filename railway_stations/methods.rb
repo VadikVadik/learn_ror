@@ -109,8 +109,7 @@ end
 
 def edit_route
   route = choose_route
-  puts "1. Добавить станцию
-2. Удалить стацию"
+  puts "1. Добавить станцию\n2. Удалить станцию"
   user_input = gets.chomp.to_i
   station = choose_station
   case user_input
@@ -133,8 +132,7 @@ end
 def move_train
   train = choose_train
   puts "Поезду №#{train.number} не назначен маршрут." if train.route.nil?
-  puts "1. Ехать вперед
-2. Ехать назад"
+  puts "1. Ехать вперед\n2. Ехать назад"
   user_input = gets.chomp.to_i
   train.go_ahead if user_input == 1
   train.go_back if user_input == 2

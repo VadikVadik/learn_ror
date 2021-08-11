@@ -3,9 +3,15 @@
 class Wagon
   include InstanceCounter
   include CompanyManufacturer
+  include Validation
+
+  TYPE = "No type"
+
   attr_accessor :used_place, :number
   attr_writer :free_place
   attr_reader :type, :place
+
+  validate :place, :presence
 
   @instances_count = 0
 
@@ -17,13 +23,6 @@ class Wagon
     register_instance
   end
 
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
-  end
-
   def free_place
     place - used_place
   end
@@ -31,14 +30,5 @@ class Wagon
   def type_to_s
     return "Пассажирский" if self.class::TYPE == :passenger
     return "Грузовой" if self.class::TYPE == :cargo
-  end
-
-  protected
-
-  def validate!
-    errors = []
-    errors << "Нет данных о количестве мест в вагоне" if place.nil?
-    errors << "Неверное количество мест в вагоне" if place.zero?
-    raise errors.join(". ") unless errors.empty?
   end
 end

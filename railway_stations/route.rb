@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 class Route
+  include Validation
   include InstanceCounter
 
   attr_reader :departure_station, :arrival_station, :stations_list
+
+  validate :departure_station, :presence
+  validate :arrival_station, :presence
 
   @instances_count = 0
 
@@ -13,13 +17,6 @@ class Route
     validate!
     @stations_list = [departure_station, arrival_station]
     register_instance
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def add_transition_station(station)
@@ -75,14 +72,5 @@ class Route
 
   def print_stations_list
     stations_list.each_with_index { |station, index| puts "#{index + 1}. #{station.title}" }
-  end
-
-  protected
-
-  def validate!
-    errors = []
-    errors << "Отсутствуют сведения о станции отправления" if departure_station.nil?
-    errors << "Отсутствуют сведения о станции назначения" if arrival_station.nil?
-    raise errors.join(". ") unless errors.empty?
   end
 end

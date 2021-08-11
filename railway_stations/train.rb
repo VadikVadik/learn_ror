@@ -1,14 +1,20 @@
 # frozen_string_literal: true
 
 class Train
+  include Validation
   include InstanceCounter
   include CompanyManufacturer
+
+  TRAIN_NUMBER_FORMAT = /^[A-Z0-9]{3}-?[A-Z0-9]{2}$/i.freeze
+  TYPE = "No type"
 
   attr_accessor :number, :wagons, :current_speed, :instances_count, :current_station, :next_station, :previous_station,
                 :route
   attr_reader :type
 
-  TRAIN_NUMBER_FORMAT = /^[A-Z0-9]{3}-?[A-Z0-9]{2}$/i.freeze
+  validate :number, :presence
+  validate :number, :format, TRAIN_NUMBER_FORMAT
+
   @@trains = []
   @instances_count = 0
 
@@ -28,13 +34,6 @@ class Train
 
   def self.find(number)
     @@trains.detect { |train| train.number == number }
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def type_to_s
@@ -79,14 +78,6 @@ class Train
   end
 
   protected
-
-  def validate!
-    errors = []
-    errors << "У поезда должен быть номер" if number.nil?
-    errors << "Номер поезда должен содержать не менее 5 символов" if number.size < 5
-    errors << "Неверный формат номера поезда" if number !~ TRAIN_NUMBER_FORMAT
-    raise errors.join(". ") unless errors.empty?
-  end
 
   def add_wagon!(wagon)
     return unless type == wagon.type

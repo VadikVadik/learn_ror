@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class Station
+  include Validation
   include InstanceCounter
 
   attr_accessor :title, :trains
+
+  validate :title, :presence
 
   @@stations = []
   @instances_count = 0
@@ -18,13 +21,6 @@ class Station
 
   def self.all
     @@stations
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def each_trains(&block)
@@ -51,14 +47,5 @@ class Station
     trains.each_with_index do |train, index|
       puts "#{index + 1}. Поезд №#{train.number}"
     end
-  end
-
-  protected
-
-  def validate!
-    errors = []
-    errors << "Название станции не введено" if title.nil?
-    errors << "Название станции должно содержать не менее 1 символа" if title.size.zero?
-    raise errors.join(". ") unless errors.empty?
   end
 end
