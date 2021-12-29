@@ -1,1 +1,1 @@
-2.times.puts "hello world 2"
+puts "hello world 2"

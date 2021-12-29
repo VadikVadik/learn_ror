@@ -1,1 +1,1 @@
-3.times.puts "hello world"
+puts "hello world"
